@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>notepad</title>
+</head>
+<style type="text/css">
+ol,ul{
+display:block;
+list-style-type:none;
+margin:3px;
+}
+</style><body>
+<div>&lt;!DOCTYPE html&gt;<br>
+&lt;html lang="zh"&gt;<br>
+&lt;head&gt;<br>
+&nbsp; &lt;meta charset="UTF-8"&gt;<br>
+&nbsp; &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;<br>
+&nbsp; &lt;title&gt;&#25193;&#23637;&#29256;&#22855;&#38376;&#36929;&#30002;&#21152;&#23494;&#36135;&#24065;&#20132;&#26131;&#20998;&#26512;&#22120;&lt;/title&gt;<br>
+&nbsp; &lt;style&gt;<br>
+&nbsp;&nbsp;&nbsp; body { font-family: Arial, sans-serif; margin: 20px; }<br>
+&nbsp;&nbsp;&nbsp; pre { background-color: #f7f7f7; padding: 10px; }<br>
+&nbsp;&nbsp;&nbsp; input, select { padding: 5px; margin: 5px 0; }<br>
+&nbsp; &lt;/style&gt;<br>
+&lt;/head&gt;<br>
+&lt;body&gt;<br>
+&nbsp; &lt;h1&gt;&#25193;&#23637;&#29256;&#22855;&#38376;&#36929;&#30002;&#21152;&#23494;&#36135;&#24065;&#20132;&#26131;&#20998;&#26512;&#22120;&lt;/h1&gt;<br>
+&nbsp; &lt;label for="currency"&gt;&#36873;&#25321;&#24065;&#31181;&#65306;&lt;/label&gt;<br>
+&nbsp; &lt;select id="currency"&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;option value="1"&gt;BTC&lt;/option&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;option value="0.9"&gt;ETH&lt;/option&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;option value="1.1"&gt;EOS&lt;/option&gt;<br>
+&nbsp;&nbsp;&nbsp; &lt;!-- &#21487;&#25353;&#38656;&#28155;&#21152;&#24065;&#31181;&#24182;&#35774;&#32622;&#23545;&#24212;&#20462;&#27491;&#31995;&#25968; --&gt;<br>
+&nbsp; &lt;/select&gt;<br>
+&nbsp; &lt;button onclick="runQiMenAnalysis()"&gt;&#24320;&#22987;&#20998;&#26512;&lt;/button&gt;<br>
+&nbsp; &lt;pre id="analysis"&gt;&lt;/pre&gt;<br>
+&nbsp; <br>
+&nbsp; &lt;script&gt;<br>
+&nbsp;&nbsp;&nbsp; class QiMenDunJia {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; constructor(currencyFactor = 1) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &#22522;&#26412;&#26500;&#20214;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.jiuGong = [1, 9, 3, 7, 5, 2, 8, 4, 6];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.bagua = ['&#22350;', '&#22372;', '&#38663;', '&#24061;', '&#20013;', '&#20094;', '&#20817;', '&#33390;', '&#31163;'];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.jiuXing = ['&#22825;&#34028;', '&#22825;&#33454;', '&#22825;&#20914;', '&#22825;&#36741;', '&#22825;&#31165;', '&#22825;&#24515;', '&#22825;&#26609;', '&#22825;&#20219;', '&#22825;&#33521;'];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.baMen = ['&#20241;&#38376;', '&#29983;&#38376;', '&#20260;&#38376;', '&#26460;&#38376;', '&#26223;&#38376;', '&#27515;&#38376;', '&#24778;&#38376;', '&#24320;&#38376;'];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.baShen = ['&#20540;&#31526;', '&#34723;&#34503;', '&#22826;&#38452;', '&#20845;&#21512;', '&#30333;&#34382;', '&#29572;&#27494;', '&#20061;&#22320;', '&#20061;&#22825;'];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.sanQi = ['&#20057;', '&#19993;', '&#19969;'];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.liuYi = ['&#25098;', '&#24049;', '&#24218;', '&#36763;', '&#22764;', '&#30328;'];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.tianGan = ['&#30002;', '&#20057;', '&#19993;', '&#19969;', '&#25098;', '&#24049;', '&#24218;', '&#36763;', '&#22764;', '&#30328;'];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.diZhi = ['&#23376;', '&#19985;', '&#23493;', '&#21359;', '&#36784;', '&#24051;', '&#21320;', '&#26410;', '&#30003;', '&#37193;', '&#25100;', '&#20133;'];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &#21508;&#38376;&#23646;&#24615;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.gateQualities = {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '&#20241;&#38376;': { buy: 7, sell: 3, description: '&#21513; - &#36866;&#21512;&#20445;&#23432;&#65292;&#38271;&#32447;&#25345;&#26377;' },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '&#29983;&#38376;': { buy: 9, sell: 2, description: '&#22823;&#21513; - &#26368;&#36866;&#21512;&#20080;&#20837;&#65292;&#26377;&#22686;&#20540;&#28508;&#21147;' },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '&#20260;&#38376;': { buy: 3, sell: 7, description: '&#20982; - &#19981;&#36866;&#21512;&#20080;&#20837;&#65292;&#36866;&#21512;&#21334;&#20986;' },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '&#26460;&#38376;': { buy: 5, sell: 5, description: '&#20013;&#24179; - &#35266;&#26395;&#20026;&#20027;&#65292;&#36866;&#37327;&#20132;&#26131;' },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '&#26223;&#38376;': { buy: 6, sell: 4, description: '&#20013;&#21513; - &#36866;&#21512;&#20080;&#20837;&#65292;&#20294;&#38656;&#27490;&#30408;' },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '&#27515;&#38376;': { buy: 1, sell: 9, description: '&#22823;&#20982; - &#21334;&#20986;&#20026;&#20027;&#65292;&#36991;&#20813;&#20080;&#20837;' },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '&#24778;&#38376;': { buy: 2, sell: 8, description: '&#20982; - &#19981;&#36866;&#21512;&#20080;&#20837;&#65292;&#23452;&#27490;&#25439;' },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '&#24320;&#38376;': { buy: 8, sell: 2, description: '&#21513; - &#31215;&#26497;&#20080;&#20837;&#65292;&#19981;&#23452;&#21334;&#20986;' }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; };<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &#20061;&#26143;&#24433;&#21709;&#21442;&#25968;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.starQualities = {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '&#22825;&#34028;': { volatility: 7, trend: 3, description: '&#21464;&#25968;&#22823;&#65292;&#36208;&#21183;&#19981;&#31283;' },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '&#22825;&#33454;': { volatility: 4, trend: 6, description: '&#20013;&#24615;&#65292;&#30053;&#20559;&#31283;' },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '&#22825;&#20914;': { volatility: 8, trend: 2, description: '&#31361;&#30772;&#24613;&#21464;&#65292;&#28608;&#36827;&#36208;&#21183;' },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '&#22825;&#36741;': { volatility: 3, trend: 7, description: '&#36235;&#21183;&#24179;&#31283;&#65292;&#19978;&#19979;&#26377;&#24207;' },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '&#22825;&#31165;': { volatility: 5, trend: 5, description: '&#20013;&#23616;&#35843;&#33410;&#65292;&#36716;&#25240;&#20851;&#21475;' },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '&#22825;&#24515;': { volatility: 2, trend: 8, description: '&#31283;&#20581;&#65292;&#36235;&#21183;&#26126;&#30830;' },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '&#22825;&#26609;': { volatility: 6, trend: 4, description: '&#38459;&#21147;&#25110;&#25903;&#25745;&#26126;&#26174;' },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '&#22825;&#20219;': { volatility: 4, trend: 6, description: '&#20851;&#38190;&#36716;&#25240;&#65292;&#36131;&#20219;&#25152;&#22312;' },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '&#22825;&#33521;': { volatility: 9, trend: 1, description: '&#26497;&#31471;&#27874;&#21160;&#65292;&#31361;&#21457;&#34892;&#24773;' }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; };<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &#20843;&#31070;&#24433;&#21709;&#21442;&#25968;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.deityInfluences = {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '&#20540;&#31526;': { risk: 5, opportunity: 5, description: '&#24635;&#20307;&#21629;&#36816;' },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '&#34723;&#34503;': { risk: 8, opportunity: 2, description: '&#38544;&#34109;&#39118;&#38505;&#65292;&#26292;&#36300;&#39044;&#35686;' },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '&#22826;&#38452;': { risk: 3, opportunity: 7, description: '&#28508;&#22312;&#26426;&#36935;&#65292;&#32531;&#21319;&#36235;&#21183;' },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '&#20845;&#21512;': { risk: 2, opportunity: 8, description: '&#22810;&#26041;&#21033;&#22909;&#65292;&#21512;&#20316;&#20849;&#36194;' },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '&#30333;&#34382;': { risk: 9, opportunity: 1, description: '&#20982;&#38505;&#65292;&#36991;&#38505;&#20026;&#20027;' },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '&#29572;&#27494;': { risk: 7, opportunity: 3, description: '&#26263;&#20013;&#21464;&#21270;&#65292;&#38544;&#34255;&#39118;&#38505;' },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '&#20061;&#22320;': { risk: 4, opportunity: 6, description: '&#31283;&#22266;&#25903;&#25745;&#65292;&#24213;&#37096;&#31283;&#23450;' },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '&#20061;&#22825;': { risk: 3, opportunity: 7, description: '&#31361;&#30772;&#39044;&#20806;&#65292;&#36235;&#21521;&#19978;&#21319;' }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; };<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &#24065;&#31181;&#25935;&#24863;&#22240;&#23376;&#65288;&#20462;&#27491;&#25972;&#20307;&#20449;&#21495;&#24378;&#24230;&#65289;&#65292;&#40664;&#35748;&#20026;1<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.currencyFactor = currencyFactor;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &#33258;&#21160;&#21028;&#26029;&#38452;&#38451;&#65306;&#22686;&#21152;&#8220;&#22825;&#36947;&#8221;&#22240;&#23376;&#65292;&#37319;&#29992;&#24403;&#21069;&#23567;&#26102;&#20313;&#25968;&#20462;&#27491;&#65288;24&#23567;&#26102;&#21046;&#65289;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; determineYangYinDun(date) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const hour = date.getHours();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &#22914;&#26524;&#24403;&#21069;&#23567;&#26102;&#20026;&#20598;&#25968;&#65292;&#21017;&#22825;&#36947;&#36739;&#24179;&#31283;&#65292;&#20026;&#38451;&#36929;&#65307;&#22855;&#25968;&#26102;&#65292;&#21017;&#38452;&#36929;&#33021;&#37327;&#36739;&#30427;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return (hour % 2 === 0) ? 'yang' : 'yin';<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &#22686;&#24378;&#29256;&#23616;&#25968;&#35745;&#31639;&#65306;&#21152;&#20837;&#22825;&#24178;&#22320;&#25903;&#12289;&#22825;&#21629;&#22240;&#23376;&#65288;&#20197;&#24403;&#21069;&#20998;&#38047;&#25968;&#35745;&#31639;&#65289;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; calculateDunJu(date) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const { month, day, hour, minute } = {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; month: date.getMonth() + 1,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; day: date.getDate(),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; hour: date.getHours(),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; minute: date.getMinutes()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; };<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &#22522;&#30784;&#23616;&#25968;&#65306;&#26376;&#12289;&#26085;&#12289;&#26102;&#30456;&#21152;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let baseJu = ((month + day + hour) % 9) || 9;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &#22825;&#24178;&#22240;&#23376;&#65306;&#21462;&#24403;&#21069;&#22825;&#24178;&#25152;&#22312;&#24207;&#21495;&#65288;&#20197;&#26085;&#20316;&#20026;&#21442;&#32771;&#65289;&#65292;&#19977;&#22855;&#21152;1&#65292;&#20845;&#20202;&#20943;1<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const tianGan = this.tianGan[(day + hour) % 10];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (this.sanQi.includes(tianGan)) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; baseJu = (baseJu % 9) + 1;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else if (this.liuYi.includes(tianGan)) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; baseJu = (baseJu - 2) &lt; 1 ? 9 + (baseJu - 2) : baseJu - 2;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &#22825;&#21629;&#22240;&#23376;&#65306;&#20197;&#20998;&#38047;&#25968;&#27169;3&#65292;&#28155;&#21152;&#21040;&#23616;&#25968;&#20013;&#65288;&#22686;&#24378;&#26263;&#27969;&#25928;&#24212;&#65289;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const destinyFactor = (minute % 3);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let finalJu = (baseJu + destinyFactor) % 9;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return finalJu === 0 ? 9 : finalJu;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &#35745;&#31639;&#20027;&#23548;&#38376;&#65306;&#22312;&#21407;&#26377;&#22522;&#30784;&#19978;&#21152;&#20837;&#8220;&#22320;&#25903;&#26144;&#23556;&#8221;&#20462;&#27491;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; calculateRulingGate(date, timeframeMinutes) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const dunType = this.determineYangYinDun(date);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const dunJu = this.calculateDunJu(date);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const totalMinutes = date.getHours() * 60 + date.getMinutes();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const cycleFactor = Math.floor(totalMinutes / timeframeMinutes) % 8;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let adjustedFactor = (cycleFactor + dunJu) % 8;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &#22686;&#21152;&#22320;&#25903;&#26144;&#23556;&#65306;&#26681;&#25454;&#24403;&#21069;&#23567;&#26102;&#23545;8&#38376;&#36827;&#34892;&#36827;&#19968;&#27493;&#25490;&#21015;&#20462;&#27491;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; adjustedFactor = (adjustedFactor + (date.getHours() % 3)) % 8;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let gateIndex = (dunType === 'yin') ? (7 - adjustedFactor) : adjustedFactor;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return this.baMen[gateIndex];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &#35745;&#31639;&#20027;&#23548;&#26143;&#65306;&#22686;&#21152;&#8220;&#22825;&#24178;&#23548;&#21521;&#8221;&#20462;&#27491;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; calculateRulingStar(date, timeframeMinutes) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const dunJu = this.calculateDunJu(date);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let seed = (date.getHours() * 60 + date.getMinutes() + timeframeMinutes) % 9;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &#21152;&#20837;&#22825;&#24178;&#23548;&#21521;&#65306;&#29992;&#24403;&#21069;&#23567;&#26102;&#38500;&#20197;3&#20313;&#25968;&#20462;&#27491;&#20061;&#26143;&#25490;&#24207;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; seed = (seed + (date.getHours() % 3)) % 9;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return this.jiuXing[(seed + dunJu) % 9];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &#35745;&#31639;&#20027;&#23548;&#31070;&#65306;&#22686;&#21152;&#8220;&#26263;&#27969;&#25351;&#25968;&#8221;&#36741;&#21161;&#20462;&#27491;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; calculateRulingDeity(date, timeframeMinutes) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let seed = date.getDay() + date.getHours() + Math.floor(timeframeMinutes / 15);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &#26263;&#27969;&#20462;&#27491;&#65306;&#29992;&#20998;&#38047;&#25968;&#20013;&#30340;&#21313;&#20301;&#25968;&#35843;&#33410;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; seed += Math.floor(date.getMinutes() / 10);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return this.baShen[seed % 8];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &#35745;&#31639;&#26263;&#27969;&#25351;&#25968;&#65306;&#20195;&#34920;&#24066;&#22330;&#38544;&#34109;&#21147;&#37327;&#65288;0-10&#65289;&#65292;&#22522;&#20110;&#26102;&#38388;&#21644;&#24065;&#31181;&#25935;&#24863;&#22240;&#23376;&#35745;&#31639;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; calculateUnderCurrent(date) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const factor = (date.getMinutes() + date.getSeconds()) % 10;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &#32467;&#21512;&#24065;&#31181;&#25935;&#24863;&#22240;&#23376;&#20462;&#27491;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return (factor * this.currencyFactor).toFixed(1);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &#20998;&#26512;&#21333;&#19968;&#26102;&#38388;&#21608;&#26399;&#30340;&#20132;&#26131;&#20449;&#21495;&#65288;&#25193;&#20805;&#29256;&#65289;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; analyzeTimeframe(date, timeframeMinutes) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const rulingGate = this.calculateRulingGate(date, timeframeMinutes);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const rulingStar = this.calculateRulingStar(date, timeframeMinutes);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const rulingDeity = this.calculateRulingDeity(date, timeframeMinutes);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const gateQuality = this.gateQualities[rulingGate];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const starQuality = this.starQualities[rulingStar];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const deityInfluence = this.deityInfluences[rulingDeity];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &#22522;&#26412;&#20080;&#21334;&#20449;&#21495;&#35745;&#31639;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const buySignal = (<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; gateQuality.buy * 0.5 +<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (10 - starQuality.volatility) * 0.2 +<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; starQuality.trend * 0.1 +<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; deityInfluence.opportunity * 0.2<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; );<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const sellSignal = (<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; gateQuality.sell * 0.5 +<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; starQuality.volatility * 0.2 +<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (10 - starQuality.trend) * 0.1 +<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; deityInfluence.risk * 0.2<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; );<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let recommendation;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (buySignal &gt; sellSignal + 2) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; recommendation = '&#24378;&#28872;&#24314;&#35758;&#20080;&#20837;';<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else if (buySignal &gt; sellSignal) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; recommendation = '&#20559;&#21521;&#20080;&#20837;';<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else if (sellSignal &gt; buySignal + 2) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; recommendation = '&#24378;&#28872;&#24314;&#35758;&#21334;&#20986;';<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else if (sellSignal &gt; buySignal) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; recommendation = '&#20559;&#21521;&#21334;&#20986;';<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; recommendation = '&#35266;&#26395;&#20026;&#20027;';<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; timeframe: timeframeMinutes + " &#20998;&#38047;",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rulingGate: rulingGate,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rulingStar: rulingStar,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rulingDeity: rulingDeity,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; buySignal: (buySignal).toFixed(1),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sellSignal: (sellSignal).toFixed(1),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; recommendation: recommendation,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; gateDescription: gateQuality.description,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; starDescription: starQuality.description,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; deityDescription: deityInfluence.description<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; };<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &#29983;&#25104;&#22810;&#20010;&#26102;&#38388;&#21608;&#26399;&#20998;&#26512;&#25253;&#21578;&#65292;&#36755;&#20986;&#26356;&#22810;&#38544;&#34255;&#21442;&#25968;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; generateTradingAnalysis(date = new Date()) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const timeframes = [15, 30, 60, 240, 480];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const analyses = timeframes.map(tf =&gt; this.analyzeTimeframe(date, tf));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const yangYinDun = this.determineYangYinDun(date);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const dunJu = this.calculateDunJu(date);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const underCurrent = this.calculateUnderCurrent(date);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; currentTime: date.toLocaleString(),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; yangYinDun: (yangYinDun === 'yang') ? '&#38451;&#36929;' : '&#38452;&#36929;',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dunJu: dunJu + "&#23616;",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; underCurrent: underCurrent,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; timeframeAnalyses: analyses<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; };<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+&nbsp;&nbsp;&nbsp; }<br>
+&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp; // &#20027;&#20989;&#25968;&#65306;&#33258;&#21160;&#33719;&#21462;&#24403;&#21069;&#26102;&#38388;&#65292;&#24065;&#31181;&#20316;&#20026;&#20462;&#27491;&#21442;&#25968;&#20256;&#20837;<br>
+&nbsp;&nbsp;&nbsp; function runQiMenAnalysis() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const currencyFactor = parseFloat(document.getElementById("currency").value);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const qimen = new QiMenDunJia(currencyFactor);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const analysis = qimen.generateTradingAnalysis(); // &#20351;&#29992;&#24403;&#21069;&#26102;&#38388;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let output = "===============================\n";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; output += "&#25193;&#23637;&#29256;&#22855;&#38376;&#36929;&#30002;&#21152;&#23494;&#36135;&#24065;&#20132;&#26131;&#20998;&#26512;\n";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; output += "===============================\n";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; output += "&#20998;&#26512;&#26102;&#38388;: " + analysis.currentTime + "\n";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; output += "&#36929;&#31867;: " + analysis.yangYinDun + "\n";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; output += "&#23616;&#25968;: " + analysis.dunJu + "\n";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; output += "&#26263;&#27969;&#25351;&#25968;: " + analysis.underCurrent + "&#65288;&#21453;&#26144;&#24066;&#22330;&#38544;&#34109;&#33021;&#37327;&#65289;\n";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; output += "===============================\n";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; analysis.timeframeAnalyses.forEach(tf =&gt; {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; output += "\n== " + tf.timeframe + " &#20998;&#26512; ==\n";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; output += "&#20027;&#23548;&#38376;: " + tf.rulingGate + " (" + tf.gateDescription + ")\n";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; output += "&#20027;&#23548;&#26143;: " + tf.rulingStar + " (" + tf.starDescription + ")\n";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; output += "&#20027;&#23548;&#31070;: " + tf.rulingDeity + " (" + tf.deityDescription + ")\n";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; output += "&#20080;&#20837;&#25351;&#25968;: " + tf.buySignal + "/10\n";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; output += "&#21334;&#20986;&#25351;&#25968;: " + tf.sellSignal + "/10\n";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; output += "&#24314;&#35758;: " + tf.recommendation + "\n";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; output += "--------------------------------\n";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; });<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; document.getElementById("analysis").innerText = output;<br>
+&nbsp;&nbsp;&nbsp; }<br>
+&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp; // &#21021;&#27425;&#36816;&#34892;&#65306;&#28857;&#20987;&#25353;&#38062;&#21518;&#21047;&#26032;&#65292;&#25110;&#21487;&#35774;&#32622;&#23450;&#26102;&#21047;&#26032;&#65288;&#27492;&#22788;&#20197;&#25353;&#38062;&#35302;&#21457;&#20026;&#20027;&#65289;<br>
+&nbsp; &lt;/script&gt;<br>
+&lt;/body&gt;<br>
+&lt;/html&gt;<br>
+</div>
+</body>
+</html>
